@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+    <style>
+        body { font-family: sans-serif; max-width: 900px; margin: 40px auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f5f5f5; width: 15%; }
+        input[type=text], textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        textarea { height: 250px; resize: vertical; }
+        .buttons { margin-top: 20px; text-align: right; }
+        button { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
+        .save { background: #2f6fed; }
+        .delete { background: #e04848; }
+        .list { background: #777; }
+    </style>
+</head>
+<body>
+    <h2>게시글 수정</h2>
+
+    <form id="updateForm" th:action="@{/Post/update}" method="post">
+        <input type="hidden" name="id" th:value="${post.id}">
+        <table>
+            <tr>
+                <th>번호</th>
+                <td th:text="${post.id}">1</td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td><input type="text" name="title" th:value="${post.title}" required maxlength="200"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td th:text="${post.writer}">작성자</td>
+            </tr>
+            <tr>
+                <th>작성일</th>
+                <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2026-01-01</td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td><textarea name="content" th:text="${post.content}" required></textarea></td>
+            </tr>
+        </table>
+    </form>
+
+    <form id="deleteForm" th:action="@{/Post/delete/{id}(id=${post.id})}" method="post"></form>
+
+    <div class="buttons">
+        <button type="submit" form="updateForm" class="save">수정</button>
+        <button type="button" class="delete"
+                onclick="if (confirm('정말 삭제하시겠습니까?')) document.getElementById('deleteForm').submit();">삭제</button>
+        <button type="button" class="list" th:data-url="@{/Post/list}" onclick="location.href=this.dataset.url">목록</button>
+    </div>
+</body>
+</html>
